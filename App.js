@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import VideoScreen from './src/pages/VideoScreen';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 import {store, persistor} from './src/store/configureStore';
-import VideoTextScreen from './src/pages/VideoTextScreen.js';
-import {TouchableOpacity, Text, View} from 'react-native';
+import AppNavigator from './src/navigations/AppNavigator';
 
 const App = () => {
   const [showReels, setShowReels] = useState(true);
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <View
+        <AppNavigator />
+        {/* <View
           style={{
             width: '100%',
             alignItems: 'center',
@@ -31,7 +30,7 @@ const App = () => {
             <Text>Switch Screen</Text>
           </TouchableOpacity>
         </View>
-        {showReels ? <VideoScreen /> : <VideoTextScreen />}
+        {showReels ? <VideoScreen /> : <VideoTextScreen />} */}
       </PersistGate>
     </Provider>
   );
