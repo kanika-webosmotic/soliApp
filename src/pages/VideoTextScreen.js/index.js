@@ -3,11 +3,11 @@ import {View, Dimensions, StyleSheet, Text} from 'react-native';
 import VideoPlayer from 'react-native-video-player';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AudioPlayer from '../../components/AudioPlayer';
-
-const {width, height} = Dimensions.get('window');
-const videoHeight = height * 0.35;
+import {useScreenDimensions} from '../../customHooks/useScreenDimensions';
 
 const VideoTextScreen = ({video}) => {
+  const {height, width} = useScreenDimensions();
+  const videoHeight = height * 0.35;
   return (
     <View style={{flex: 1}}>
       <View
@@ -20,6 +20,7 @@ const VideoTextScreen = ({video}) => {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
+            backgroundColor: 'black',
           }}>
           <VideoPlayer
             video={require('../../assets/demo.webm')}
@@ -28,7 +29,6 @@ const VideoTextScreen = ({video}) => {
             style={{
               height: videoHeight,
               width,
-              backgroundColor: 'black',
             }}
             onVideoLoad={() => console.log('on video load')}
             onVideoLoadStart={() => console.log('on video load start')}

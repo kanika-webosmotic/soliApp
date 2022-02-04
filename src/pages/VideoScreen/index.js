@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import VideoPlayer from 'react-native-video-player';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,16 +8,19 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Swiper from 'react-native-swiper';
 import {ActivityIndicator} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-
-const {width, height} = Dimensions.get('window');
+import {useScreenDimensions} from '../../customHooks/useScreenDimensions';
 
 const VideoScreen = ({video}) => {
   const videoData = useSelector(state => state.videoReducer?.videoData) || [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const {height, width} = useScreenDimensions();
+  const videoRef = useRef();
+  console.log({videoRef});
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <View
         style={{
-          height: height - 20,
+          height,
           width,
         }}>
         <Swiper
@@ -25,6 +28,7 @@ const VideoScreen = ({video}) => {
           width={width}
           height={height - 20}
           loadMinimal={true}
+          onIndexChanged={index => setCurrentIndex(index)}
           showsPagination={false}>
           {videoData.map((item, index) => {
             return (
@@ -58,7 +62,7 @@ const VideoScreen = ({video}) => {
                     bottom: 0,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    zIndex: 3,
+                    zIndex: 10,
                   }}>
                   <MaterialCommunityIcons
                     name={'heart-outline'}
@@ -83,6 +87,9 @@ const VideoScreen = ({video}) => {
                 </View>
                 <View style={{zIndex: 5}}>
                   <VideoPlayer
+                    ref={videoRef}
+                    key={index.toString()}
+                    currentIndex={currentIndex}
                     video={item?.file || {uri: item?.url}}
                     videoWidth={width}
                     videoHeight={height - 20}
@@ -96,14 +103,18 @@ const VideoScreen = ({video}) => {
                     thumbnail={{
                       uri: 'https://i.picsum.photos/id/866/1600/900.jpg',
                     }}
+                    // fullscreen={true}
+                    fullscreenOrientation="landscape"
+                    fullscreenAutorotate={true}
+                    fullScreenOnLongPress={true}
                     resizeMode="contain"
-                    controls={false}
+                    // controls={true}
                     autoplay={true}
-                    customStyles={{
-                      controls: {
-                        display: 'none',
-                      },
-                    }}
+                    // customStyles={{
+                    //   controls: {
+                    //     display: 'none',
+                    //   },
+                    // }}
                     repeat={true}
                   />
                 </View>
